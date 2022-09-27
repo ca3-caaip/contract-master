@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
+from typing import Literal
 
 from pydantic.main import BaseModel
 from web3 import Web3
 
 
 class Balance(BaseModel):
+    application: str
+    service: Literal["spot", "farming", "staked", "liquidity pool", "lending"]
     token: str
     balance: int
     decimals: int

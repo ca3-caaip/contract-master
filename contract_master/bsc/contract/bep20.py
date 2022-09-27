@@ -18,4 +18,4 @@ class Bep20TokenContract(BaseContract):
             block_identifier=block_identifier
         )
         decimals = self.contract.functions.decimals().call(block_identifier=block_identifier)
-        return Balance(token=self.address, balance=balance, decimals=decimals)
+        return Balance(application="bsc", service="spot", token=self.address, balance=balance, decimals=decimals)
