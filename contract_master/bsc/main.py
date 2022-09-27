@@ -23,10 +23,8 @@ class BscContractMaster:
         contract_address = contract_address.lower()
         user_address = Web3.toChecksumAddress(user_address)
         block_identifier = block_height if block_height else "latest"
-        if contract_address in self.master:
-            master = self.master[contract_address]
-        else:
-            raise Exception("No Master Data. Address: {}".format(contract_address))
+        master = self.master[contract_address]
+
         match master.type:
             case "bep20":
                 contract = self.get_contract(contract_address)
