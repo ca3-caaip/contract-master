@@ -39,10 +39,8 @@ if __name__ == "__main__":
             raise Exception("no such platform")
         if args.user_address is not None and args.contract_address is not None:
             block_height = args.block_height if args.block_height else None
-            balance_of = contract_master.balance_of(contract_address=args.contract_address, user_address=args.user_address, block_height=block_height)
-            print("balance_of : {}".format(balance_of))
-            get_balance = contract_master.get_balance(contract_address=args.contract_address, user_address=args.user_address, block_height=block_height)
-            print("get_balance: {}".format(get_balance))
+            bep20_balance = contract_master.get_bep20_token_balance(contract_address=args.contract_address, user_address=args.user_address, block_height=block_height)
+            print("bep20_balance : {}".format(bep20_balance))
         elif args.user_address is None:
             raise Exception("user_address is required")
         elif args.contract_address is None:
