@@ -25,5 +25,5 @@ class BaseContract(ABC):
         self.contract = self.web3.eth.contract(address=Web3.toChecksumAddress(address), abi=self.ABI)
 
     @abstractmethod
-    def balance_of(self, account: str, block_height: int | None = None) -> Balance:
+    def balance_of(self, account: str, block_height: int | None = None) -> Balance | list[Balance]:
         pass

@@ -1,3 +1,5 @@
+from typing import Literal
+
 from web3 import Web3
 
 from .base import Balance, BaseContract
@@ -17,7 +19,10 @@ class Bep20TokenContract(BaseContract):
         balance = self.contract.functions.balanceOf(Web3.toChecksumAddress(account)).call(
             block_identifier=block_identifier
         )
-        decimals = self.contract.functions.decimals().call(block_identifier=block_identifier)
+        decimals = self.get_decimals(block_identifier=block_identifier)
         return Balance(
             application="bsc", service="spot", type="common", token=self.address, balance=balance, decimals=decimals
         )
+
+    def get_decimals(self, block_identifier: int | Literal["latest"]) -> int:
+        return self.contract.functions.decimals().call(block_identifier=block_identifier)
