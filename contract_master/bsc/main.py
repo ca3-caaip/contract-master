@@ -1,6 +1,6 @@
 from web3 import Web3
 
-from .contract import Balance, Bep20TokenContract, SmartChefContract
+from .contract import Balance, Bep20TokenContract, IgnoredResult, SmartChefContract
 from .internal import load_master_data
 
 
@@ -27,19 +27,21 @@ class BscContractMaster:
 
     def get_balance(
         self, contract_address: str, user_address: str, block_height: int | None = None
-    ) -> list[Balance] | Balance | str | None:
+    ) -> list[Balance] | IgnoredResult:
         master = self.master[contract_address]
 
         match master.type:
             case "likebep20":
-                return self.get_bep20_token_balance(
-                    contract_address=contract_address, user_address=user_address, block_height=block_height
-                )
+                return [
+                    self.get_bep20_token_balance(
+                        contract_address=contract_address, user_address=user_address, block_height=block_height
+                    )
+                ]
             case "smartchef":
                 return self.get_smartchef_balance(
                     contract_address=contract_address, user_address=user_address, block_height=block_height
                 )
             case "ignored":
-                return "ignored address: {}".format(contract_address)
+                return IgnoredResult(token=contract_address)
             case _:
                 raise Exception("AddressNotSupported")
