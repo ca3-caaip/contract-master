@@ -1,10 +1,12 @@
 from datetime import datetime
 from os import path
+from time import sleep
 from typing import Type
 
 from web3 import Web3
 
 from contract_master.common.models import CovalentTx
+from contract_master.common.utils import equals, lower, unique
 
 from ..common import (
     BalanceResult,
@@ -28,6 +30,11 @@ class BscContractMaster(ContractMaster):
 
     def __init__(self, quicknode_endpoint: str, txs: list[CovalentTx], target_datetime: datetime, user_address: str):
         super().__init__(txs, target_datetime, user_address)
+        fungible_token_addresses, possessable_addresses = self.__get_relevant_contract_addresses(
+            base_address=user_address, transactions=self.txs
+        )
+        self.fungible_token_addresses = fungible_token_addresses
+        self.possessable_addresses = possessable_addresses
         self.master = load_master_data(BscContractMaster.MASTER_CSV_FILE_PATH)
         self.web3 = Web3(Web3.HTTPProvider(quicknode_endpoint))
         if not self.web3.isConnected():
@@ -68,6 +75,7 @@ class BscContractMaster(ContractMaster):
         return (fungible_token_balances, errors)
 
     def __get_token_balance(self, contract_address: str) -> BalanceResult | ErroredResult:
+        sleep(0.04)  # 25回毎秒がリミットなので
         try:
             return BalanceResult(
                 application="bsc",
@@ -98,7 +106,7 @@ class BscContractMaster(ContractMaster):
                 return IgnoredResult(token=contract_address)
             case _:
                 return ErroredResult(token=contract_address, reason=f"UnsupportedType: {contract_address}")
-
+        sleep(0.04)  # 25回毎秒がリミットなので
         try:
             return BalanceResult(
                 application=master.application,
@@ -109,3 +117,23 @@ class BscContractMaster(ContractMaster):
             )
         except Exception as e:
             return ErroredResult(token=contract_address, reason=str(e))
+
+    def __get_relevant_contract_addresses(
+        self, base_address: str, transactions: list[CovalentTx]
+    ) -> tuple[list[str], list[str]]:
+        fungible_token_addresses: list[str] = []
+        possessable_addresses: list[str] = []
+
+        for tx in transactions:
+            for e in tx.log_events:
+                if e.decoded and e.decoded.name == "Transfer":
+                    # 自分が含まれるTransferイベントのsender_addressはfungible tokenとして全て収集し、資産取得対象に含める
+                    if equals(e.decoded.get_param("from"), base_address) or equals(
+                        e.decoded.get_param("to"), base_address
+                    ):
+                        fungible_token_addresses.append(e.sender_address)
+                    # 自分からどこかのコントラクトにTransferしているものはpossessableとみなし、資産取得対象に含める
+                    if equals(e.decoded.get_param("from"), base_address):
+                        possessable_addresses.append(e.decoded.get_param("to"))
+
+        return unique(lower(fungible_token_addresses)), unique(lower(possessable_addresses))
