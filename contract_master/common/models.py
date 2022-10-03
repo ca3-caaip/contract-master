@@ -1,7 +1,10 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import Literal, Optional, Union
 
 from pydantic import BaseModel
+
+from .utils import find_first
 
 
 class TokenAmount(BaseModel):
@@ -65,3 +68,66 @@ ServiceItem = Union[
     LendingServiceItem,
     LiquidityPoolServiceItem,
 ]
+
+
+class ContractActionParams(BaseModel):
+    name: str
+    type: str
+    indexed: bool
+    value: str
+
+
+class ContractAction(BaseModel):
+    name: str
+    signature: str
+    params: list[ContractActionParams] | None
+
+    def get_param(self, name: str) -> str:
+        if self.params is None:
+            raise Exception("ParamsIsNone")
+
+        def has_same_name(target: ContractActionParams) -> bool:
+            return target.name == name
+
+        return find_first(has_same_name, self.params).value
+
+
+class CovalentTxEventLog(BaseModel):
+    block_signed_at: datetime
+    block_height: int
+    tx_offset: int
+    log_offset: int
+    tx_hash: str
+    raw_log_topics: list[str]
+    sender_contract_decimals: int | None
+    sender_name: str | None  # ContractAddressの場合はContract名
+    sender_contract_ticker_symbol: str | None
+    sender_address: str
+    sender_address_label: str | None
+    sender_logo_url: str | None
+    raw_log_data: str | None
+    decoded: ContractAction | None
+
+    def get_id(self) -> str:
+        return f"{self.block_height}/{self.tx_offset}/{self.log_offset}"
+
+
+class CovalentTx(BaseModel):
+    block_signed_at: datetime
+    block_height: int
+    tx_hash: str
+    tx_offset: int
+    successful: bool
+    from_address: str
+    from_address_label: str | None
+    to_address: str
+    to_address_label: str | None
+    value: str
+    value_quote: str
+    gas_offered: int
+    gas_spent: int
+    gas_price: int
+    fees_paid: str | None
+    gas_quote: float
+    gas_quote_rate: float
+    log_events: list[CovalentTxEventLog]

@@ -1,11 +1,14 @@
 import argparse
+import json
 import os
+from datetime import datetime, timezone
 from typing import Any
 
 from dotenv import load_dotenv
 from pydantic.main import BaseModel
 
 from contract_master.bsc.main import BscContractMaster
+from contract_master.common.models import CovalentTx
 
 load_dotenv: Any
 load_dotenv()
@@ -14,9 +17,16 @@ load_dotenv()
 class Arguments(BaseModel):
     platform: str
     user_address: str
-    contract_address: str
-    block_height: int | None
+    txs: list[CovalentTx]
+    target_datetime: datetime
     quicknode_endpoint: str
+
+
+def open_tx_files(path: str) -> list[CovalentTx]:
+    with open(path, "r") as f:
+        txs = json.load(f)
+    txs = list(map(lambda x: CovalentTx.parse_obj(x), txs))
+    return txs
 
 
 def parse_args():
@@ -25,18 +35,18 @@ def parse_args():
         "--platform",
         help="--platfrom [platform]",
     )
-    parser.add_argument("--contract_address", help="--contract_address [contract_address]")
     parser.add_argument("--user_address", help="--user_address [user_address]")
-    parser.add_argument("--block_height", help="--block_height [block_height]")
     parser.add_argument("--quicknode_endpoint", help="--quicknode_endpoint [quicknode_endpoint]")
+    parser.add_argument("--target_datetime", help="--target_datetime [target_datetime]")
+    parser.add_argument("--txs_path", help="--txs_path [txs_path]")
     args = parser.parse_args()
 
     return Arguments(
         platform=args.platform or "bsc",
-        user_address=args.contract_address or "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
-        contract_address=args.contract_address or "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
-        block_height=args.block_height if args.block_height else None,
+        user_address=args.user_address or "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
         quicknode_endpoint=args.quicknode_endpoint or os.getenv("QUICKNODE_BSC_ENDPOINT", ""),
+        target_datetime=args.target_datetime or datetime(2022, 9, 30, 1, 31, tzinfo=timezone.utc),
+        txs=open_tx_files("sample_data/covalent_sample.json") or open_tx_files(args.txs_path),
     )
 
 
@@ -50,11 +60,14 @@ if __name__ == "__main__":
     validate_args(args)
 
     if args.platform == "bsc":
-        contract_master = BscContractMaster(quicknode_endpoint=args.quicknode_endpoint)
-        bep20_balance = contract_master.get_token_balance(
-            contract_address=args.contract_address, user_address=args.user_address, block_height=args.block_height
+        contract_master = BscContractMaster(
+            txs=args.txs,
+            quicknode_endpoint=args.quicknode_endpoint,
+            target_datetime=args.target_datetime,
+            user_address=args.user_address,
         )
-        print("bep20_balance : {}".format(bep20_balance))
+        balances = contract_master.get_balances()
+        print("balances : {}".format(balances))
 
     else:
         raise Exception(f"platform={args.platform} not supported")
