@@ -5,16 +5,18 @@ from typing import Type
 
 from web3 import Web3
 
-from contract_master.common.models import CovalentTx
-from contract_master.common.utils import equals, lower, unique
-
 from ..common import (
     BalanceResult,
     Contract,
     ContractMaster,
+    CovalentTx,
     ErroredResult,
+    GetBalanceResult,
     IgnoredResult,
+    equals,
     load_master_data,
+    lower,
+    unique,
 )
 from .contract import (
     Bep20TokenContract,
@@ -43,12 +45,14 @@ class BscContractMaster(ContractMaster):
         if not self.web3.isConnected():
             raise Exception("QuickNodeConnectionError")
 
-    def get_balances(self) -> list[list[BalanceResult] | list[IgnoredResult] | list[ErroredResult]]:
+    def get_balances(self) -> GetBalanceResult:
         fungible_token_balances, fungible_errors = self.__get_fungible_token_address_balances()
-        possession_balances, possesion_errors, ignored_addresses = self.__get_possessable_address_balances()
-        balance_result = fungible_token_balances + possession_balances
-        errors = fungible_errors + possesion_errors
-        return [balance_result, errors, ignored_addresses]
+        possessable_balances, possessable_errors, possessable_ignored = self.__get_possessable_address_balances()
+        return GetBalanceResult(
+            balance_results=fungible_token_balances + possessable_balances,
+            ignored_results=possessable_ignored,
+            errored_results=fungible_errors + possessable_errors,
+        )
 
     def __get_possessable_address_balances(
         self,

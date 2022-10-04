@@ -2,36 +2,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Callable
 
-from pydantic.main import BaseModel
-
-from .models import CovalentTx, ServiceItem
-
-
-class BalanceResult(BaseModel):
-    """
-    ContractMaster.get_balanceで資産取得が成功した場合の結果
-    """
-
-    application: str
-    service: str
-    items: list[ServiceItem]
-
-
-class IgnoredResult(BaseModel):
-    """
-    ContractMaster.get_balanceでトークンが対象外の場合の結果
-    """
-
-    token: str
-
-
-class ErroredResult(BaseModel):
-    """
-    ContractMaster.get_balanceでエラーが発生した場合の結果
-    """
-
-    token: str
-    reason: str
+from .models import CovalentTx
+from .result import GetBalanceResult
 
 
 class ContractMaster(ABC):
@@ -57,5 +29,5 @@ class ContractMaster(ABC):
         return max_block_height
 
     @abstractmethod
-    def get_balances(self) -> list[list[BalanceResult] | list[IgnoredResult] | list[ErroredResult]]:
+    def get_balances(self) -> GetBalanceResult:
         pass

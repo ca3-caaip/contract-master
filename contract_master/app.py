@@ -72,9 +72,9 @@ if __name__ == "__main__":
             user_address=args.user_address,
         )
         logger.info("start to BscContractMaster.get_balances()")
-        balances = contract_master.get_balances()
+        result = contract_master.get_balances()
         logger.info("complete BscContractMaster.get_balances()")
-        print("{}".format(balances))
+        print(result.to_json())
 
     else:
         raise Exception(f"platform={args.platform} not supported")
