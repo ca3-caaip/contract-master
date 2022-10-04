@@ -11,6 +11,7 @@ repos:
     rev: v3.0.0-alpha.0
     hooks:
       - id: prettier
+        files: "contract_master|tests"
   - repo: https://github.com/psf/black
     rev: 22.8.0
     hooks:

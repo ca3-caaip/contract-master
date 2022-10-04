@@ -18,6 +18,8 @@ from ..common import (
 )
 from .contract import (
     Bep20TokenContract,
+    CreamLendingCErc20Delegator,
+    CreamLendingCEther,
     PancakeIFO,
     PancakeLiquidityPool,
     PancakeStaking,
@@ -94,6 +96,10 @@ class BscContractMaster(ContractMaster):
             return ErroredResult(token=contract_address, reason=f"UndefinedAddress: {contract_address}")
 
         match master.type:
+            case "CreamLendingCEther":
+                contract = CreamLendingCEther
+            case "CreamLendingCErc20Delegator":
+                contract = CreamLendingCErc20Delegator
             case "pancake_ifo":
                 contract = PancakeIFO
             case "pancake_lp":
