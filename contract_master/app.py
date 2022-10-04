@@ -8,16 +8,19 @@ from dotenv import load_dotenv
 from pydantic.main import BaseModel
 
 from contract_master.bsc.main import BscContractMaster
-from contract_master.common.models import CovalentTx
+from contract_master.common import CovalentTx, create_logger
 
 load_dotenv: Any
 load_dotenv()
 
 
+logger = create_logger()
+
+
 class Arguments(BaseModel):
     platform: str
     user_address: str
-    txs: list[CovalentTx]
+    txs_path: str
     target_datetime: datetime
     quicknode_endpoint: str
 
@@ -46,7 +49,7 @@ def parse_args():
         user_address=args.user_address or "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
         quicknode_endpoint=args.quicknode_endpoint or os.getenv("QUICKNODE_BSC_ENDPOINT", ""),
         target_datetime=args.target_datetime or datetime(2022, 9, 30, 1, 31, tzinfo=timezone.utc),
-        txs=open_tx_files("sample_data/covalent_sample.json") or open_tx_files(args.txs_path),
+        txs_path=args.txs_path or os.path.join(os.path.dirname(__file__), "../sample_data/covalent_sample.json"),
     )
 
 
@@ -56,17 +59,21 @@ def validate_args(args: Arguments) -> None:
 
 
 if __name__ == "__main__":
+    logger.info("app start")
     args = parse_args()
     validate_args(args)
 
     if args.platform == "bsc":
+        logger.info(f"initialize BscContractMaster with loading transactions from {args.txs_path}")
         contract_master = BscContractMaster(
-            txs=args.txs,
+            txs=open_tx_files(args.txs_path),
             quicknode_endpoint=args.quicknode_endpoint,
             target_datetime=args.target_datetime,
             user_address=args.user_address,
         )
+        logger.info("start to BscContractMaster.get_balances()")
         balances = contract_master.get_balances()
+        logger.info("complete BscContractMaster.get_balances()")
         print("balances : {}".format(balances))
 
     else:
