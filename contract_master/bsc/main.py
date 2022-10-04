@@ -22,6 +22,7 @@ from .contract import (
     CreamLendingCEther,
     PancakeIFO,
     PancakeLiquidityPool,
+    PancakeMasterChef,
     PancakeStaking,
     PancakeVault,
 )
@@ -82,7 +83,7 @@ class BscContractMaster(ContractMaster):
             return BalanceResult(
                 application="bsc",
                 service="spot",
-                item=Bep20TokenContract(web3=self.web3, address=contract_address).balance_of(
+                items=Bep20TokenContract(web3=self.web3, address=contract_address).balance_of(
                     account=self.user_address, block_height=self.block_height
                 ),
             )
@@ -108,6 +109,8 @@ class BscContractMaster(ContractMaster):
                 contract = PancakeStaking
             case "pancake_vault":
                 contract = PancakeVault
+            case "pancake_chef":
+                contract = PancakeMasterChef
             case "ignored":
                 return IgnoredResult(token=contract_address)
             case _:
@@ -117,7 +120,7 @@ class BscContractMaster(ContractMaster):
             return BalanceResult(
                 application=master.application,
                 service=master.service,
-                items=contract(web3=self.web3, address=contract_address).balance_of(
+                items=contract(web3=self.web3, address=contract_address, txs=self.txs).balance_of(
                     account=self.user_address, block_height=self.block_height
                 ),
             )
