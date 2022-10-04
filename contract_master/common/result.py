@@ -1,5 +1,6 @@
 import json
 from functools import reduce
+from itertools import filterfalse
 from typing import Any, TypeAlias
 
 from pydantic.main import BaseModel
@@ -49,8 +50,10 @@ def accumulate_balance_results(balance_results: list[BalanceResult]) -> BalanceS
         services: dict[Service, list[Item]] = summary.get(balance.application, dict())
         items: list[Item] = services.get(balance.service, list())
 
-        items.extend(list(map(lambda x: x.dict(), balance.items)))
-        services[balance.service] = items
+        additional_items = filterfalse(lambda x: x.is_empty(), balance.items)
+        additional_items = list(map(lambda x: x.dict(), additional_items))
+
+        services[balance.service] = items + additional_items
         summary[balance.application] = services
         return summary
 

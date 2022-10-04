@@ -41,9 +41,9 @@ def test_accumulate_balance_results():
                         type="common",
                         data=TokenAmount(
                             uti="busd",
-                            amount="0.2",
+                            amount="0",
                             original_id="0xe9e7cea3dedca5984780bafc599bd69add087d56",
-                            balance=200,
+                            balance=0,
                             decimals=3,
                             symbol="BUSD",
                         ),
@@ -150,17 +150,6 @@ def test_accumulate_balance_results():
                         "balance": 100,
                         "decimals": 3,
                         "symbol": "USDT",
-                    },
-                },
-                {
-                    "type": "common",
-                    "data": {
-                        "uti": "busd",
-                        "amount": "0.2",
-                        "original_id": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
-                        "balance": 200,
-                        "decimals": 3,
-                        "symbol": "BUSD",
                     },
                 },
             ]

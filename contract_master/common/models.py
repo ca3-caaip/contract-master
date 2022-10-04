@@ -2,6 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Literal, Optional, Union
 
+from more_itertools import exactly_n
 from pydantic import BaseModel
 
 from .utils import find_first
@@ -15,10 +16,21 @@ class TokenAmount(BaseModel):
     decimals: int
     symbol: str
 
+    @classmethod
+    def is_empty(cls, value: "TokenAmount") -> bool:
+        return value.balance == 0
+
+    @classmethod
+    def is_all_empty(cls, values: list["TokenAmount"]) -> bool:
+        return exactly_n(values, len(values), TokenAmount.is_empty)
+
 
 class CommonServiceItem(BaseModel):
     type: Literal["common"] = "common"
     data: TokenAmount
+
+    def is_empty(self):
+        return TokenAmount.is_empty(self.data)
 
 
 class FarmingServiceItem(BaseModel):
@@ -30,6 +42,9 @@ class FarmingServiceItem(BaseModel):
     type: Literal["farming"] = "farming"
     data: FarmingServiceData
 
+    def is_empty(self):
+        return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
+
 
 class StakedServiceItem(BaseModel):
     class StakedServiceData(BaseModel):
@@ -40,6 +55,9 @@ class StakedServiceItem(BaseModel):
     type: Literal["staked"] = "staked"
     data: StakedServiceData
 
+    def is_empty(self):
+        return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
+
 
 class LiquidityPoolServiceItem(BaseModel):
     class LiquidityPoolServiceData(BaseModel):
@@ -48,6 +66,9 @@ class LiquidityPoolServiceItem(BaseModel):
 
     type: Literal["liquidity pool"] = "liquidity pool"
     data: LiquidityPoolServiceData
+
+    def is_empty(self):
+        return TokenAmount.is_all_empty(self.data.supply)
 
 
 class LendingServiceItem(BaseModel):
@@ -59,6 +80,13 @@ class LendingServiceItem(BaseModel):
 
     type: Literal["lending"] = "lending"
     data: LendingServiceData
+
+    def is_empty(self):
+        return (
+            TokenAmount.is_all_empty(self.data.supply)
+            and TokenAmount.is_all_empty(self.data.borrow)
+            and TokenAmount.is_all_empty(self.data.reward)
+        )
 
 
 ServiceItem = Union[
