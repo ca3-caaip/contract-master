@@ -11,7 +11,7 @@ class CreamLendingCEther(Contract):
     def __init__(self, web3: Web3, address: str) -> None:
         super().__init__(web3, address)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> LendingServiceItem:
+    def balance_of(self, account: str, block_height: int | None = None) -> list[LendingServiceItem]:
         block_identifier = block_height if block_height else "latest"
 
         # crBNBはunderlyingをmethodで取得できず、暗黙的にwrapped bnbが定数として利用されている
@@ -19,17 +19,19 @@ class CreamLendingCEther(Contract):
         balance = self.contract.functions.balanceOfUnderlying(Web3.toChecksumAddress(account)).call(
             block_identifier=block_identifier
         )
-        return LendingServiceItem(
-            data=LendingServiceItem.LendingServiceData(
-                supply=[
-                    create_bsc_token_amount(
-                        token=underlying_token,
-                        balance=balance,
-                        decimals=self.get_decimals(underlying_token),
-                        symbol=self.get_symbol(underlying_token),
-                    )
-                ],
-                borrow=[],
-                reward=[],
+        return [
+            LendingServiceItem(
+                data=LendingServiceItem.LendingServiceData(
+                    supply=[
+                        create_bsc_token_amount(
+                            token=underlying_token,
+                            balance=balance,
+                            decimals=self.get_decimals(underlying_token),
+                            symbol=self.get_symbol(underlying_token),
+                        )
+                    ],
+                    borrow=[],
+                    reward=[],
+                )
             )
-        )
+        ]

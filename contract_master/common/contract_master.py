@@ -14,7 +14,7 @@ class BalanceResult(BaseModel):
 
     application: str
     service: str
-    item: ServiceItem
+    items: list[ServiceItem]
 
 
 class IgnoredResult(BaseModel):

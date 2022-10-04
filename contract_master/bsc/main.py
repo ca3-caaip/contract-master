@@ -117,7 +117,7 @@ class BscContractMaster(ContractMaster):
             return BalanceResult(
                 application=master.application,
                 service=master.service,
-                item=contract(web3=self.web3, address=contract_address).balance_of(
+                items=contract(web3=self.web3, address=contract_address).balance_of(
                     account=self.user_address, block_height=self.block_height
                 ),
             )
