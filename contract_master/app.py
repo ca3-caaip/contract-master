@@ -74,7 +74,7 @@ if __name__ == "__main__":
         logger.info("start to BscContractMaster.get_balances()")
         balances = contract_master.get_balances()
         logger.info("complete BscContractMaster.get_balances()")
-        print("balances : {}".format(balances))
+        print("{}".format(balances))
 
     else:
         raise Exception(f"platform={args.platform} not supported")
