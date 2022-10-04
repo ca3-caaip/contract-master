@@ -20,13 +20,13 @@ class PancakeStaking(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx] | None = None) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> ServiceItem:
+    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
         block_identifier = block_height if block_height else "latest"
 
         staked = self._get_staked_balance(account=account, block_identifier=block_identifier)
         reward = self._get_reward_balance(account=account, block_identifier=block_identifier)
 
-        return StakedServiceItem(data=StakedServiceItem.StakedServiceData(supply=[staked], reward=[reward]))
+        return [StakedServiceItem(data=StakedServiceItem.StakedServiceData(supply=[staked], reward=[reward]))]
 
     def _get_staked_balance(self, account: str, block_identifier: int | Literal["latest"]) -> TokenAmount:
         amount, _reward_debt = self.contract.functions.userInfo(Web3.toChecksumAddress(account)).call(

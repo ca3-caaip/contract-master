@@ -18,7 +18,7 @@ class Contract(ABC):
         self.txs = txs
 
     @abstractmethod
-    def balance_of(self, account: str, block_height: int | None = None) -> ServiceItem | list[ServiceItem]:
+    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
         pass
 
     def get_symbol(self, token: str) -> str:

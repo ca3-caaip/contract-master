@@ -17,7 +17,7 @@ class PancakeLiquidityPool(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx] | None = None) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> ServiceItem:
+    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
         account = Web3.toChecksumAddress(account)
         block_identifier = block_height if block_height else "latest"
 
@@ -33,21 +33,23 @@ class PancakeLiquidityPool(Contract):
         user_token0_balance = int(token0_reserve * user_share)
         user_token1_balance = int(token1_reserve * user_share)
 
-        return LiquidityPoolServiceItem(
-            data=LiquidityPoolServiceItem.LiquidityPoolServiceData(
-                supply=[
-                    create_bsc_token_amount(
-                        token=token0,
-                        balance=user_token0_balance,
-                        decimals=self.get_decimals(token=token0),
-                        symbol=self.get_symbol(token0),
-                    ),
-                    create_bsc_token_amount(
-                        token=token1,
-                        balance=user_token1_balance,
-                        decimals=self.get_decimals(token1),
-                        symbol=self.get_symbol(token1),
-                    ),
-                ]
+        return [
+            LiquidityPoolServiceItem(
+                data=LiquidityPoolServiceItem.LiquidityPoolServiceData(
+                    supply=[
+                        create_bsc_token_amount(
+                            token=token0,
+                            balance=user_token0_balance,
+                            decimals=self.get_decimals(token=token0),
+                            symbol=self.get_symbol(token0),
+                        ),
+                        create_bsc_token_amount(
+                            token=token1,
+                            balance=user_token1_balance,
+                            decimals=self.get_decimals(token1),
+                            symbol=self.get_symbol(token1),
+                        ),
+                    ]
+                )
             )
-        )
+        ]

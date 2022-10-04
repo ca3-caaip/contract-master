@@ -17,7 +17,7 @@ class PancakeIFO(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx] | None = None) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> ServiceItem:
+    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
         account = Web3.toChecksumAddress(account)
         block_identifier = block_height if block_height else "latest"
 
@@ -25,11 +25,13 @@ class PancakeIFO(Contract):
         ifo_info: list[int] = self.contract.functions.userIFOInfo(account).call(block_identifier=block_identifier)
         last_action_balance: int = ifo_info[0]
 
-        return CommonServiceItem(
-            data=create_bsc_token_amount(
-                token=token,
-                balance=last_action_balance,
-                decimals=self.get_decimals(token),
-                symbol=self.get_symbol(token),
+        return [
+            CommonServiceItem(
+                data=create_bsc_token_amount(
+                    token=token,
+                    balance=last_action_balance,
+                    decimals=self.get_decimals(token),
+                    symbol=self.get_symbol(token),
+                )
             )
-        )
+        ]
