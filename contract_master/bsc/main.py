@@ -101,15 +101,15 @@ class BscContractMaster(ContractMaster):
                 contract = CreamLendingCEther
             case "CreamLendingCErc20Delegator":
                 contract = CreamLendingCErc20Delegator
-            case "pancake_ifo":
+            case "PancakeIFO":
                 contract = PancakeIFO
-            case "pancake_lp":
+            case "PancakeLiquidityPool":
                 contract = PancakeLiquidityPool
-            case "pancake_staking":
+            case "PancakeStaking":
                 contract = PancakeStaking
-            case "pancake_vault":
+            case "PancakeVault":
                 contract = PancakeVault
-            case "pancake_chef":
+            case "PancakeMasterChef":
                 contract = PancakeMasterChef
             case "ignored":
                 return IgnoredResult(token=contract_address)
