@@ -52,6 +52,9 @@ class PancakeMasterChef(Contract):
         return farming_service_item_list
 
     def __fetch_pids(self) -> list[str]:
+        """
+        ステーキングされているものを取得するのに必要なPIDをトランザクションから探している。PIDの数が最終的なリストの長さになる
+        """
         txs = self.txs
         if txs is None:
             raise ValueError("There are no Transactions")
@@ -68,6 +71,9 @@ class PancakeMasterChef(Contract):
     def __get_rewards_token_amount(
         self, pid: str, account: ChecksumAddress, rewards_token: str, block_identifier: int | Literal["latest"]
     ) -> TokenAmount:
+        """
+        リワードを集計する
+        """
         rewards_amount: int = self.contract.functions.pendingCake(int(pid), account).call(
             block_identifier=block_identifier
         )
@@ -81,6 +87,9 @@ class PancakeMasterChef(Contract):
     def __parse_staked_lp(
         self, amount: int, lp_token: str, block_identifier: int | Literal["latest"]
     ) -> list[TokenAmount]:
+        """
+        ステークしてるLP Pairからここの量を取得して返す
+        """
         lp_contract = PancakeLiquidityPool(web3=self.web3, address=lp_token).contract
         token0: str = lp_contract.functions.token0().call(block_identifier=block_identifier)
         token1: str = lp_contract.functions.token1().call(block_identifier=block_identifier)
