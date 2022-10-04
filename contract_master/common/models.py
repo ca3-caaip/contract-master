@@ -29,7 +29,7 @@ class CommonServiceItem(BaseModel):
     type: Literal["common"] = "common"
     data: TokenAmount
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return TokenAmount.is_empty(self.data)
 
 
@@ -42,7 +42,7 @@ class FarmingServiceItem(BaseModel):
     type: Literal["farming"] = "farming"
     data: FarmingServiceData
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
 
 
@@ -55,7 +55,7 @@ class StakedServiceItem(BaseModel):
     type: Literal["staked"] = "staked"
     data: StakedServiceData
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
 
 
@@ -67,7 +67,7 @@ class LiquidityPoolServiceItem(BaseModel):
     type: Literal["liquidity pool"] = "liquidity pool"
     data: LiquidityPoolServiceData
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return TokenAmount.is_all_empty(self.data.supply)
 
 
@@ -81,7 +81,7 @@ class LendingServiceItem(BaseModel):
     type: Literal["lending"] = "lending"
     data: LendingServiceData
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return (
             TokenAmount.is_all_empty(self.data.supply)
             and TokenAmount.is_all_empty(self.data.borrow)
