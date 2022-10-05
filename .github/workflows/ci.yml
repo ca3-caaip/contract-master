@@ -17,4 +17,5 @@ jobs:
       - name: Run poetry install
         run: poetry config virtualenvs.in-project true && poetry install
       - uses: pre-commit/action@v3.0.0
-      - run: poetry run pytest -v --cov=src tests/unit
+      - name: Run pytest
+        run: poetry run pytest -v --cov=src tests/unit
