@@ -10,3 +10,4 @@ from .pancake_liquidity_pool import PancakeLiquidityPool
 from .pancake_master_chef import PancakeMasterChef
 from .pancake_staking import PancakeStaking
 from .pancake_vault import PancakeVault
+from .stablex_super_chef import StablexSuperChef
