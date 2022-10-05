@@ -23,7 +23,8 @@ class IgnoredResult(BaseModel):
     ContractMaster.get_balanceでトークンが対象外の場合の結果
     """
 
-    token: str
+    address: str
+    reason: str
 
 
 class ErroredResult(BaseModel):
@@ -31,7 +32,7 @@ class ErroredResult(BaseModel):
     ContractMaster.get_balanceでエラーが発生した場合の結果
     """
 
-    token: str
+    address: str
     reason: str
 
 
