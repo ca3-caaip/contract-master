@@ -104,7 +104,7 @@ class BscContractMaster(ContractMaster):
         master = self.master.get(address, None)
         if master is None:
             if self.__is_contract(address):
-                return ErroredResult(address=address, reason="MasterUndefined")
+                return ErroredResult(address=address, reason="MasterNotDefined")
             else:
                 return IgnoredResult(address=address, reason="EOA")
 
