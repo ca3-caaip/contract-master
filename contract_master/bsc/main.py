@@ -50,7 +50,7 @@ class BscContractMaster(ContractMaster):
         self.web3.eth.default_block = self.block_identifier
 
     def get_balances(self) -> GetBalanceResult:
-        fungible_token_balances, fungible_errors = self.__get_fungible_token_address_balances()
+        fungible_token_balances, fungible_errors = self.__get_fungible_token_balances()
         possessable_balances, possessable_errors, possessable_ignored = self.__get_possessable_address_balances()
         return GetBalanceResult(
             balance_results=fungible_token_balances + possessable_balances,
@@ -75,7 +75,7 @@ class BscContractMaster(ContractMaster):
                 balances.append(res)
         return balances, errored, ignored
 
-    def __get_fungible_token_address_balances(self) -> tuple[list[BalanceResult], list[ErroredResult]]:
+    def __get_fungible_token_balances(self) -> tuple[list[BalanceResult], list[ErroredResult]]:
         errors: list[ErroredResult] = list()
         fungible_token_balances: list[BalanceResult] = list()
         for address in self.fungible_token_addresses:
@@ -167,4 +167,4 @@ class BscContractMaster(ContractMaster):
         )
 
     def __is_contract(self, address: str) -> bool:
-        return self.web3.eth.get_code(address) != b""
+        return self.web3.eth.get_code(Web3.toChecksumAddress(address)) != b""
