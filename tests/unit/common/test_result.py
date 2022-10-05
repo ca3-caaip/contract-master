@@ -232,10 +232,10 @@ class TestGetBalanceResult(TestCase):
                         ],
                     )
                 ],
-                errored_results=[ErroredResult(token="token", reason="reason")],
-                ignored_results=[IgnoredResult(token="token")],
+                errored_results=[ErroredResult(address="address", reason="reason")],
+                ignored_results=[IgnoredResult(address="address", reason="reason")],
             ).to_json()
             == '{"summary": {"bsc": {"spot": [{"type": "common", "data": {"uti": "usdt", "amount": "0.1",'
-            ' "original_id": "id", "balance": 100, "decimals": 3, "symbol": "USDT"}}]}}, "ignored": [{"token":'
-            ' "token"}], "errored": [{"token": "token", "reason": "reason"}]}'
+            ' "original_id": "id", "balance": 100, "decimals": 3, "symbol": "USDT"}}]}}, "ignored": [{"address":'
+            ' "address", "reason": "reason"}], "errored": [{"address": "address", "reason": "reason"}]}'
         )
