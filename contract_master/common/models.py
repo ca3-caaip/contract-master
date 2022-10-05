@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Literal, Optional, Union
+from typing import Callable, Literal, Optional, Union
 
 from more_itertools import exactly_n
 from pydantic import BaseModel
@@ -159,3 +159,7 @@ class CovalentTx(BaseModel):
     gas_quote: float
     gas_quote_rate: float
     log_events: list[CovalentTxEventLog]
+
+    @classmethod
+    def is_signed_within(cls, max_datetime: datetime) -> Callable[["CovalentTx"], bool]:
+        return lambda x: x.block_signed_at <= max_datetime

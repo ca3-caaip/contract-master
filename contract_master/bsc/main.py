@@ -33,8 +33,10 @@ from .contract import (
 class BscContractMaster(ContractMaster):
     MASTER_CSV_FILE_PATH = path.join(path.dirname(__file__), "./master.csv")
 
-    def __init__(self, quicknode_endpoint: str, txs: list[CovalentTx], target_datetime: datetime, user_address: str):
-        super().__init__(txs, target_datetime, user_address)
+    def __init__(
+        self, quicknode_endpoint: str, txs: list[CovalentTx], user_address: str, target_datetime: datetime | None = None
+    ):
+        super().__init__(txs, user_address, target_datetime)
         fungible_token_addresses, possessable_addresses = self.__get_relevant_contract_addresses(
             base_address=user_address, transactions=self.txs
         )
@@ -68,7 +70,7 @@ class BscContractMaster(ContractMaster):
                 errors.append(res)
             else:
                 possession_balances.append(res)
-        return (possession_balances, errors, ignored_addresses)
+        return possession_balances, errors, ignored_addresses
 
     def __get_fungible_token_address_balances(self) -> tuple[list[BalanceResult], list[ErroredResult]]:
         errors: list[ErroredResult] = list()
@@ -79,7 +81,7 @@ class BscContractMaster(ContractMaster):
                 errors.append(res)
             else:
                 fungible_token_balances.append(res)
-        return (fungible_token_balances, errors)
+        return fungible_token_balances, errors
 
     def __get_token_balance(self, contract_address: str) -> BalanceResult | ErroredResult:
         sleep(0.04)  # 25回毎秒がリミットなので
@@ -88,7 +90,7 @@ class BscContractMaster(ContractMaster):
                 application="bsc",
                 service="spot",
                 items=Bep20TokenContract(web3=self.web3, address=contract_address).balance_of(
-                    account=self.user_address, block_height=self.block_height
+                    account=self.user_address, block_identifier=self.block_identifier
                 ),
             )
         except Exception as e:
@@ -125,7 +127,7 @@ class BscContractMaster(ContractMaster):
                 application=master.application,
                 service=master.service,
                 items=contract(web3=self.web3, address=contract_address, txs=self.txs).balance_of(
-                    account=self.user_address, block_height=self.block_height
+                    account=self.user_address, block_identifier=self.block_identifier
                 ),
             )
         except Exception as e:

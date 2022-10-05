@@ -1,3 +1,5 @@
+from typing import Literal
+
 from web3 import Web3
 
 from ...common import CommonServiceItem, Contract, ServiceItem, create_bsc_token_amount
@@ -11,8 +13,7 @@ class Bep20TokenContract(Contract):
     def __init__(self, web3: Web3, address: str) -> None:
         super().__init__(web3, address)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
-        block_identifier = block_height if block_height else "latest"
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         balance: int = self.contract.functions.balanceOf(Web3.toChecksumAddress(account)).call(
             block_identifier=block_identifier
         )

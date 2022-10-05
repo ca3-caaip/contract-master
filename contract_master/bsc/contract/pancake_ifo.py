@@ -1,3 +1,5 @@
+from typing import Literal
+
 from web3 import Web3
 
 from ...common import (
@@ -17,10 +19,8 @@ class PancakeIFO(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx] | None = None) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         account = Web3.toChecksumAddress(account)
-        block_identifier = block_height if block_height else "latest"
-
         token: str = self.contract.functions.token().call(block_identifier=block_identifier)
         ifo_info: list[int] = self.contract.functions.userIFOInfo(account).call(block_identifier=block_identifier)
         last_action_balance: int = ifo_info[0]

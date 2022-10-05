@@ -18,10 +18,9 @@ class PancakeMasterChef(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx]) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         pids = self.__fetch_pids()
         account = Web3.toChecksumAddress(account)
-        block_identifier = block_height if block_height else "latest"
         farming_service_item_list: list[ServiceItem] = []
         for pid in pids:
             rewards_token: str = self.contract.functions.cake().call(block_identifier=block_identifier)

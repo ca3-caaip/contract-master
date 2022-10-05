@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Literal
 
 from web3 import Web3
 
@@ -18,7 +19,7 @@ class Contract(ABC):
         self.txs = txs
 
     @abstractmethod
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         pass
 
     def get_symbol(self, token: str) -> str:

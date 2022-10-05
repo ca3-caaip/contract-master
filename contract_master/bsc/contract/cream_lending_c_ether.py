@@ -1,3 +1,5 @@
+from typing import Literal
+
 from web3 import Web3
 
 from ...common import (
@@ -17,9 +19,7 @@ class CreamLendingCEther(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx]) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
-        block_identifier = block_height if block_height else "latest"
-
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         # crBNBはunderlyingをmethodで取得できず、暗黙的にwrapped bnbが定数として利用されている
         underlying_token = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
         balance = self.contract.functions.balanceOfUnderlying(Web3.toChecksumAddress(account)).call(

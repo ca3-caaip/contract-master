@@ -20,9 +20,7 @@ class PancakeStaking(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx] | None = None) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
-        block_identifier = block_height if block_height else "latest"
-
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         staked = self._get_staked_balance(account=account, block_identifier=block_identifier)
         reward = self._get_reward_balance(account=account, block_identifier=block_identifier)
 

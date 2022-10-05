@@ -1,3 +1,5 @@
+from typing import Literal
+
 from web3 import Web3
 
 from ...common import (
@@ -17,10 +19,8 @@ class PancakeLiquidityPool(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx] | None = None) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_height: int | None = None) -> list[ServiceItem]:
+    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
         account = Web3.toChecksumAddress(account)
-        block_identifier = block_height if block_height else "latest"
-
         token0: str = self.contract.functions.token0().call(block_identifier=block_identifier)
         token1: str = self.contract.functions.token1().call(block_identifier=block_identifier)
         reserves: list[int] = self.contract.functions.getReserves().call(block_identifier=block_identifier)
