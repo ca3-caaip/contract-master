@@ -44,6 +44,9 @@ address,type,application,service,name
 0xc80991f9106e26e43bf1c07c764829a85f294c71,StablexSuperChef,StableX,Farming,SuperChef
 0x01f9bfac04e6184e90bd7eafd51999ce430cc750,DodoMine,DoDo,,DoDoMine
 0x8f8dd7db1bda5ed3da8c9daf3bfa471c12d58486,ignored,DoDo,,DoDoV2Proxy02
+0xbadc0de3119d19c83feb7e9d6918e34ae75c093b,ignored,Cream,,
+0x1a338756d7b39c6ebbc8ac1dc21291845d9b6a47,ignored,Equator,,
+0xd76dc34cf9dfc43e7280f376871c98ff5bf95286,ignored,Pumk,,
 0x24b1983b230b11cc3fa9ff75c73ace7cb73e1795,EquatorLiquidityPool,Equator,,Equator Pool Token
 0x7856a258ae3709fd5535d5f7cf7b303d1255e9e2,PumkSteaking,Pumk,,PumkRewards
 0x28549206edf0ae5f63e14020de58e05da540c4c4,PumkWBnbSteaking,Pumk,,PumkWBNBRewards
