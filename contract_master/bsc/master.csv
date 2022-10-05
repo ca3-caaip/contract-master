@@ -33,3 +33,5 @@ address,type,application,service,name
 0xd83c88db3a6ca4a32fff1603b0f7ddce01f5f727,CreamLendingCErc20Delegator,Cream,Lending,crUSDC
 0x68d93efcd107a044f2dc201548b59a0ebf4181c6,PancakeLiquidityPool,StableXPair,Farming,STAX-LP
 0x01f9bfac04e6184e90bd7eafd51999ce430cc750,DodoMine,DoDo,,DoDoMine
+0x8f8dd7db1bda5ed3da8c9daf3bfa471c12d58486,ignored,DoDo,,DoDoV2Proxy02
+0x24b1983b230b11cc3fa9ff75c73ace7cb73e1795,EquatorLiquidityPool,Equator,,Equator Pool Token
