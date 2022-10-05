@@ -47,14 +47,13 @@ def _create_summary() -> BalanceSummary:
 
 def accumulate_balance_results(balance_results: list[BalanceResult]) -> BalanceSummary:
     def combine(summary: BalanceSummary, balance: BalanceResult) -> BalanceSummary:
-        services: dict[Service, list[Item]] = summary.get(balance.application, dict())
-        items: list[Item] = services.get(balance.service, list())
-
         additional_items = filterfalse(lambda x: x.is_empty(), balance.items)
         additional_items = list(map(lambda x: x.dict(), additional_items))
-
-        services[balance.service] = items + additional_items
-        summary[balance.application] = services
+        if additional_items:
+            services: dict[Service, list[Item]] = summary.get(balance.application, dict())
+            existing_items: list[Item] = services.get(balance.service, list())
+            services[balance.service] = existing_items + additional_items
+            summary[balance.application] = services
         return summary
 
     return reduce(combine, balance_results, _create_summary())

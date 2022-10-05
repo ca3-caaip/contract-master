@@ -114,9 +114,9 @@ def test_accumulate_balance_results():
                             supply=[
                                 TokenAmount(
                                     uti="busd",
-                                    amount="0.7",
+                                    amount="0",
                                     original_id="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
-                                    balance=700,
+                                    balance=0,
                                     decimals=3,
                                     symbol="BUSD",
                                 )
@@ -124,9 +124,9 @@ def test_accumulate_balance_results():
                             reward=[
                                 TokenAmount(
                                     uti="aog",
-                                    amount="0.8",
+                                    amount="0",
                                     original_id="0x40c8225329bd3e28a043b029e0d07a5344d2c27c",
-                                    balance=800,
+                                    balance=0,
                                     decimals=3,
                                     symbol="AOG",
                                 )
@@ -204,34 +204,6 @@ def test_accumulate_balance_results():
                         "description": None,
                     },
                 },
-            ],
-            "staking": [
-                {
-                    "type": "staked",
-                    "data": {
-                        "supply": [
-                            {
-                                "uti": "busd",
-                                "amount": "0.7",
-                                "original_id": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
-                                "balance": 700,
-                                "decimals": 3,
-                                "symbol": "BUSD",
-                            }
-                        ],
-                        "reward": [
-                            {
-                                "uti": "aog",
-                                "amount": "0.8",
-                                "original_id": "0x40c8225329bd3e28a043b029e0d07a5344d2c27c",
-                                "balance": 800,
-                                "decimals": 3,
-                                "symbol": "AOG",
-                            }
-                        ],
-                        "description": None,
-                    },
-                }
             ],
         },
     }
