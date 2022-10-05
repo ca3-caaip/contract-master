@@ -12,3 +12,4 @@ from .pancake_staking import PancakeStaking
 from .pancake_vault import PancakeVault
 from .pumk_bnb_staking import PumkBnbStaking
 from .pumk_staking import PumkStaking
+from .stablex_super_chef import StablexSuperChef

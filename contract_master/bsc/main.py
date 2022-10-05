@@ -31,6 +31,7 @@ from .contract import (
     PancakeVault,
     PumkBnbStaking,
     PumkStaking,
+    StablexSuperChef,
 )
 
 
@@ -129,6 +130,8 @@ class BscContractMaster(ContractMaster):
                 contract = PancakeMasterChef
             case "DodoMine":
                 contract = DodoMine
+            case "StablexSuperChef":
+                contract = StablexSuperChef
             case "EquatorLiquidityPool":
                 contract = EquatorLiquidityPool
             case "PumkSteaking":
