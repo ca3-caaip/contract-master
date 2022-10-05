@@ -1,6 +1,5 @@
 from datetime import datetime
-from decimal import Decimal
-from typing import Literal, Optional, Union
+from typing import Any, Literal, Union
 
 from more_itertools import exactly_n
 from pydantic import BaseModel
@@ -34,52 +33,48 @@ class CommonServiceItem(BaseModel):
 
 
 class FarmingServiceItem(BaseModel):
-    class FarmingServiceData(BaseModel):
+    class Data(BaseModel):
         supply: list[TokenAmount]
         reward: list[TokenAmount]
-        description: Optional[str] = None
 
     type: Literal["farming"] = "farming"
-    data: FarmingServiceData
+    data: Data
 
     def is_empty(self) -> bool:
         return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
 
 
 class StakedServiceItem(BaseModel):
-    class StakedServiceData(BaseModel):
+    class Data(BaseModel):
         supply: list[TokenAmount]
         reward: list[TokenAmount]
-        description: Optional[str] = None
 
     type: Literal["staked"] = "staked"
-    data: StakedServiceData
+    data: Data
 
     def is_empty(self) -> bool:
         return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
 
 
 class LiquidityPoolServiceItem(BaseModel):
-    class LiquidityPoolServiceData(BaseModel):
+    class Data(BaseModel):
         supply: list[TokenAmount]
-        description: Optional[str] = None
 
     type: Literal["liquidity pool"] = "liquidity pool"
-    data: LiquidityPoolServiceData
+    data: Data
 
     def is_empty(self) -> bool:
         return TokenAmount.is_all_empty(self.data.supply)
 
 
 class LendingServiceItem(BaseModel):
-    class LendingServiceData(BaseModel):
+    class Data(BaseModel):
         supply: list[TokenAmount]
         borrow: list[TokenAmount]
         reward: list[TokenAmount]
-        health_rate: Optional[Decimal] = None
 
     type: Literal["lending"] = "lending"
-    data: LendingServiceData
+    data: Data
 
     def is_empty(self) -> bool:
         return (
@@ -96,6 +91,12 @@ ServiceItem = Union[
     LendingServiceItem,
     LiquidityPoolServiceItem,
 ]
+
+
+def combine_service_items(a: ServiceItem, b: ServiceItem) -> Any:
+    if a.type != b.type:
+        raise ValueError("CanNotCombineDifferentTypes")
+    ...
 
 
 class ContractActionParams(BaseModel):

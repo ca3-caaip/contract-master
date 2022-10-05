@@ -30,7 +30,7 @@ class CreamLendingCErc20Delegator(Contract):
         ).call(block_identifier=block_identifier)
         return [
             LendingServiceItem(
-                data=LendingServiceItem.LendingServiceData(
+                data=LendingServiceItem.Data(
                     supply=[],
                     borrow=[
                         create_bsc_token_amount(

@@ -35,7 +35,7 @@ class PancakeLiquidityPool(Contract):
 
         return [
             LiquidityPoolServiceItem(
-                data=LiquidityPoolServiceItem.LiquidityPoolServiceData(
+                data=LiquidityPoolServiceItem.Data(
                     supply=[
                         create_bsc_token_amount(
                             token=token0,

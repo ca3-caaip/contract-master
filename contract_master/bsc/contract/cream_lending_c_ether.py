@@ -27,7 +27,7 @@ class CreamLendingCEther(Contract):
         )
         return [
             LendingServiceItem(
-                data=LendingServiceItem.LendingServiceData(
+                data=LendingServiceItem.Data(
                     supply=[
                         create_bsc_token_amount(
                             token=underlying_token,

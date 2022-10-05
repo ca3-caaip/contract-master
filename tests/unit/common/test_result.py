@@ -56,7 +56,7 @@ def test_accumulate_balance_results():
                 items=[
                     LiquidityPoolServiceItem(
                         type="liquidity pool",
-                        data=LiquidityPoolServiceItem.LiquidityPoolServiceData(
+                        data=LiquidityPoolServiceItem.Data(
                             supply=[
                                 TokenAmount(
                                     uti="cake",
@@ -75,12 +75,11 @@ def test_accumulate_balance_results():
                                     symbol="BUSD",
                                 ),
                             ],
-                            description=None,
                         ),
                     ),
                     LiquidityPoolServiceItem(
                         type="liquidity pool",
-                        data=LiquidityPoolServiceItem.LiquidityPoolServiceData(
+                        data=LiquidityPoolServiceItem.Data(
                             supply=[
                                 TokenAmount(
                                     uti="cake",
@@ -99,7 +98,6 @@ def test_accumulate_balance_results():
                                     symbol="BUSD",
                                 ),
                             ],
-                            description=None,
                         ),
                     ),
                 ],
@@ -110,7 +108,7 @@ def test_accumulate_balance_results():
                 items=[
                     StakedServiceItem(
                         type="staked",
-                        data=StakedServiceItem.StakedServiceData(
+                        data=StakedServiceItem.Data(
                             supply=[
                                 TokenAmount(
                                     uti="busd",
@@ -131,7 +129,6 @@ def test_accumulate_balance_results():
                                     symbol="AOG",
                                 )
                             ],
-                            description=None,
                         ),
                     )
                 ],
@@ -177,7 +174,6 @@ def test_accumulate_balance_results():
                                 "symbol": "BUSD",
                             },
                         ],
-                        "description": None,
                     },
                 },
                 {
@@ -201,7 +197,6 @@ def test_accumulate_balance_results():
                                 "symbol": "BUSD",
                             },
                         ],
-                        "description": None,
                     },
                 },
             ],

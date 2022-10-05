@@ -45,7 +45,7 @@ class PancakeMasterChef(Contract):
                     )
                 ]
             farming_service_item = FarmingServiceItem(
-                data=FarmingServiceItem.FarmingServiceData(reward=[rewards_token_amount], supply=staked_lp_info)
+                data=FarmingServiceItem.Data(reward=[rewards_token_amount], supply=staked_lp_info)
             )
             farming_service_item_list.append(farming_service_item)
         return farming_service_item_list

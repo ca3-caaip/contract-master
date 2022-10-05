@@ -35,7 +35,7 @@ class DodoMine(Contract):
             )
             staked_service_item_list.append(
                 StakedServiceItem(
-                    data=StakedServiceItem.StakedServiceData(supply=[staked_token_info], reward=[rewards_token_amount])
+                    data=StakedServiceItem.Data(supply=[staked_token_info], reward=[rewards_token_amount])
                 )
             )
         return staked_service_item_list
