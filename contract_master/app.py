@@ -46,10 +46,10 @@ def parse_args():
 
     return Arguments(
         platform=args.platform or "bsc",
-        user_address=args.user_address or "0xda28ecfc40181a6dad8b52723035dfba3386d26e",
+        user_address=args.user_address or "0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13",
         quicknode_endpoint=args.quicknode_endpoint or os.getenv("QUICKNODE_BSC_ENDPOINT", ""),
         target_datetime=args.target_datetime or datetime(2022, 9, 30, 1, 31, tzinfo=timezone.utc),
-        txs_path=args.txs_path or os.path.join(os.path.dirname(__file__), "../sample_data/tx-0xda28ec.json"),
+        txs_path=args.txs_path or os.path.join(os.path.dirname(__file__), "../sample_data/tx-0x283b7f.json"),
     )
 
 

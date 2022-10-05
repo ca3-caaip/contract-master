@@ -22,6 +22,7 @@ from .contract import (
     Bep20TokenContract,
     CreamLendingCErc20Delegator,
     CreamLendingCEther,
+    DodoMine,
     PancakeIFO,
     PancakeLiquidityPool,
     PancakeMasterChef,
@@ -117,6 +118,8 @@ class BscContractMaster(ContractMaster):
                 contract = PancakeVault
             case "PancakeMasterChef":
                 contract = PancakeMasterChef
+            case "DodoMine":
+                contract = DodoMine
             case "ignored":
                 return IgnoredResult(token=contract_address)
             case _:
@@ -127,7 +130,7 @@ class BscContractMaster(ContractMaster):
                 application=master.application,
                 service=master.service,
                 items=contract(web3=self.web3, address=contract_address, txs=self.txs).balance_of(
-                    account=self.user_address, block_identifier=self.block_identifier
+                    account=self.user_address
                 ),
             )
         except Exception as e:
