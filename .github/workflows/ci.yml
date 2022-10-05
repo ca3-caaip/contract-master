@@ -19,4 +19,4 @@ jobs:
       - uses: pre-commit/action@v3.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - run: poetry run pytest -v --cov=src
+      - run: poetry run pytest -v --cov=src tests/unit
