@@ -72,10 +72,18 @@ class PancakeMasterChef(Contract):
     ) -> TokenAmount:
         """
         リワードを集計する
+
+        Contract側で"SafeMath: division by zero"のエラーを返す場合があるが、原因はtotalAllocPointで除算する箇所があるため
+        このエラーはContractの利用者がいなくなった場合に発生すると思われる。エラーが発生した場合は数量0として返却する
         """
-        rewards_amount: int = self.contract.functions.pendingCake(int(pid), account).call(
-            block_identifier=block_identifier
-        )
+        rewards_amount: int = 0
+        try:
+            rewards_amount = self.contract.functions.pendingCake(int(pid), account).call(
+                block_identifier=block_identifier
+            )
+        except Exception:
+            pass
+
         return create_bsc_token_amount(
             token=rewards_token,
             balance=rewards_amount,
