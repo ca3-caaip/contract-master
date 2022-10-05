@@ -29,6 +29,8 @@ from .contract import (
     PancakeMasterChef,
     PancakeStaking,
     PancakeVault,
+    PumkBnbStaking,
+    PumkStaking,
 )
 
 
@@ -129,6 +131,10 @@ class BscContractMaster(ContractMaster):
                 contract = DodoMine
             case "EquatorLiquidityPool":
                 contract = EquatorLiquidityPool
+            case "PumkSteaking":
+                contract = PumkStaking
+            case "PumkBnbSteaking":
+                contract = PumkBnbStaking
             case "ignored":
                 return IgnoredResult(address=address, reason="IgnoreType")
             case _:

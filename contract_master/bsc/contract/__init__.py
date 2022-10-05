@@ -10,3 +10,5 @@ from .pancake_liquidity_pool import PancakeLiquidityPool
 from .pancake_master_chef import PancakeMasterChef
 from .pancake_staking import PancakeStaking
 from .pancake_vault import PancakeVault
+from .pumk_bnb_staking import PumkBnbStaking
+from .pumk_staking import PumkStaking
