@@ -48,5 +48,5 @@ address,type,application,service,name
 0x1a338756d7b39c6ebbc8ac1dc21291845d9b6a47,ignored,Equator,,
 0xd76dc34cf9dfc43e7280f376871c98ff5bf95286,ignored,Pumk,,
 0x24b1983b230b11cc3fa9ff75c73ace7cb73e1795,EquatorLiquidityPool,Equator,,Equator Pool Token
-0x7856a258ae3709fd5535d5f7cf7b303d1255e9e2,PumkSteaking,Pumk,,PumkRewards
-0x28549206edf0ae5f63e14020de58e05da540c4c4,PumkWBnbSteaking,Pumk,,PumkWBNBRewards
+0x7856a258ae3709fd5535d5f7cf7b303d1255e9e2,PumkStaking,Pumk,,PumkRewards
+0x28549206edf0ae5f63e14020de58e05da540c4c4,PumkBnbStaking,Pumk,,PumkWBNBRewards

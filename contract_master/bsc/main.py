@@ -134,9 +134,9 @@ class BscContractMaster(ContractMaster):
                 contract = StablexSuperChef
             case "EquatorLiquidityPool":
                 contract = EquatorLiquidityPool
-            case "PumkSteaking":
+            case "PumkStaking":
                 contract = PumkStaking
-            case "PumkBnbSteaking":
+            case "PumkBnbStaking":
                 contract = PumkBnbStaking
             case "ignored":
                 return IgnoredResult(address=address, reason="IgnoreType")
