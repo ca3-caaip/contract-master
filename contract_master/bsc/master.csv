@@ -60,3 +60,4 @@ address,type,application,service,name
 0x186be2a9f0e9c92b880bbd3ec1f35f422f0d8835,NarwhalStaking,NarwhalSwap,Staking,NarwahlReword
 0x6da9ee0c0571b63e38950d1e12e835d5343f601b,NarwhalStaking,NarwhalSwap,Staking,NarwahlReword
 0xcf889a0902859662c17dc895abb7af49ee28a013,NarwhalStaking,NarwhalSwap,Staking,NarwahlReword
+0xd689c5bb7534f2281cf60cbf81b2334b6043fff2,ignored,Cream,,
