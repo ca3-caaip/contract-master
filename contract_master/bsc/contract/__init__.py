@@ -5,6 +5,7 @@ from .cream_lending_c_erc20_delegator import CreamLendingCErc20Delegator
 from .cream_lending_c_ether import CreamLendingCEther
 from .dodo_mine import DodoMine
 from .equator_liquidity_pool import EquatorLiquidityPool
+from .narwhal_staking import NarwhalStaking
 from .pancake_ifo import PancakeIFO
 from .pancake_liquidity_pool import PancakeLiquidityPool
 from .pancake_master_chef import PancakeMasterChef

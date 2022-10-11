@@ -11,7 +11,7 @@ load_dotenv: Any
 load_dotenv()
 
 
-class TestPumkBnbSteaking(TestCase):
+class TestPumkBnbStaking(TestCase):
     def test_work(self):
         contract = PumkBnbStaking(
             web3=Web3(Web3.HTTPProvider(os.getenv("QUICKNODE_BSC_ENDPOINT", ""))),

@@ -24,6 +24,7 @@ from .contract import (
     CreamLendingCEther,
     DodoMine,
     EquatorLiquidityPool,
+    NarwhalStaking,
     PancakeIFO,
     PancakeLiquidityPool,
     PancakeMasterChef,
@@ -138,6 +139,8 @@ class BscContractMaster(ContractMaster):
                 contract = PumkStaking
             case "PumkBnbStaking":
                 contract = PumkBnbStaking
+            case "NarwhalStaking":
+                contract = NarwhalStaking
             case "ignored":
                 return IgnoredResult(address=address, reason="IgnoreType")
             case _:
