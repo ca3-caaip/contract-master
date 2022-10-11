@@ -151,11 +151,11 @@ class CovalentTx(BaseModel):
     to_address: str
     to_address_label: str | None
     value: str
-    value_quote: str
+    value_quote: str | None
     gas_offered: int
     gas_spent: int
     gas_price: int
     fees_paid: str | None
-    gas_quote: float
-    gas_quote_rate: float
+    gas_quote: float | None
+    gas_quote_rate: float | None
     log_events: list[CovalentTxEventLog]
