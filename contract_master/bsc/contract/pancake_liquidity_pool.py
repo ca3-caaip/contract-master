@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import Literal
 
 from web3 import Web3
@@ -29,7 +30,7 @@ class PancakeLiquidityPool(Contract):
         total_supply: int = self.contract.functions.totalSupply().call(block_identifier=block_identifier)
         user_balance: int = self.contract.functions.balanceOf(account).call(block_identifier=block_identifier)
 
-        user_share: int = int(user_balance / total_supply)
+        user_share: Decimal = Decimal(user_balance) / Decimal(total_supply)
         user_token0_balance = int(token0_reserve * user_share)
         user_token1_balance = int(token1_reserve * user_share)
 

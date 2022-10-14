@@ -9,6 +9,7 @@ from pydantic.main import BaseModel
 
 from contract_master.bsc.main import BscContractMaster
 from contract_master.common import CovalentTx, create_logger
+from contract_master.polygon.main import PolygonContractMaster
 
 load_dotenv: Any
 load_dotenv()
@@ -45,16 +46,18 @@ def parse_args():
     args = parser.parse_args()
 
     return Arguments(
-        platform=args.platform or "bsc",
+        platform=args.platform or "polygon",
         user_address=args.user_address or "0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13",
-        quicknode_endpoint=args.quicknode_endpoint or os.getenv("QUICKNODE_BSC_ENDPOINT", ""),
+        quicknode_endpoint=args.quicknode_endpoint or os.getenv("QUICKNODE_POLYGON_ENDPOINT", ""),
         target_datetime=args.target_datetime or None,  # e.g. datetime(2022, 9, 30, 1, 31, tzinfo=timezone.utc)
-        txs_path=args.txs_path or os.path.join(os.path.dirname(__file__), "../sample_data/tx-0x283b7f.json"),
+        txs_path=args.txs_path or os.path.join(os.path.dirname(__file__), "../sample_data/polygon/tx-0x283b7f.json"),
     )
 
 
 def validate_args(args: Arguments) -> None:
     if args.platform == "bsc" and args.quicknode_endpoint is None:
+        raise Exception("No quicknode_endpoint")
+    if args.platform == "polygon" and args.quicknode_endpoint is None:
         raise Exception("No quicknode_endpoint")
 
 
@@ -76,5 +79,17 @@ if __name__ == "__main__":
         logger.info("complete BscContractMaster.get_balances()")
         print(result.to_json())
 
+    if args.platform == "polygon":
+        logger.info(f"initialize PolygonContractMaster with loading transactions from {args.txs_path}")
+        contract_master = PolygonContractMaster(
+            txs=open_tx_files(args.txs_path),
+            quicknode_endpoint=args.quicknode_endpoint,
+            target_datetime=args.target_datetime,
+            user_address=args.user_address,
+        )
+        logger.info("start to PolygonContractMaster.get_balances()")
+        result = contract_master.get_balances()
+        logger.info("complete PolygonContractMaster.get_balances()")
+        print(result.to_json())
     else:
         raise Exception(f"platform={args.platform} not supported")
