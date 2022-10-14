@@ -64,7 +64,7 @@ class LiquidityPoolServiceItem(BaseModel):
         supply: list[TokenAmount]
         description: Optional[str] = None
 
-    type: Literal["liquidity_pool"] = "liquidity_pool"
+    type: Literal["liquidity pool"] = "liquidity pool"
     data: LiquidityPoolServiceData
 
     def is_empty(self) -> bool:
