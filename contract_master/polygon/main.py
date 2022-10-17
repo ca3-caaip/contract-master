@@ -18,7 +18,13 @@ from ..common import (
     lower,
     unique,
 )
-from .contract import Erc20TokenContract, PolycatMasterChef, UniLiquidityPool
+from .contract import (
+    Erc20TokenContract,
+    IronMasterChef,
+    PolycatMasterChef,
+    QuickswapStaking,
+    UniLiquidityPool,
+)
 
 
 class PolygonContractMaster(ContractMaster):
@@ -132,6 +138,10 @@ class PolygonContractMaster(ContractMaster):
                 contract = UniLiquidityPool
             case "PolycatMasterChef":
                 contract = PolycatMasterChef
+            case "IronMasterChef":
+                contract = IronMasterChef
+            case "QuickswapStaking":
+                contract = QuickswapStaking
             case "ignored":
                 return IgnoredResult(address=address, reason="IgnoreType")
             case _:
