@@ -40,11 +40,17 @@ class BscContractMaster(ContractMaster):
     MASTER_CSV_FILE_PATH = path.join(path.dirname(__file__), "./master.csv")
 
     def __init__(
-        self, quicknode_endpoint: str, txs: list[CovalentTx], user_address: str, target_datetime: datetime | None = None
+        self,
+        quicknode_endpoint: str,
+        txs: list[CovalentTx],
+        user_address: str,
+        target_datetime: datetime | None = None,
     ):
         super().__init__(txs, user_address, target_datetime)
-        eoa_addresses, fungible_token_addresses, possessable_addresses = self.__get_relevant_contract_addresses(
-            base_address=user_address, transactions=self.txs
+        eoa_addresses, fungible_token_addresses, possessable_addresses = (
+            self.__get_relevant_contract_addresses(
+                base_address=user_address, transactions=self.txs
+            )
         )
         self.eoa_addresses = eoa_addresses
         self.fungible_token_addresses = fungible_token_addresses
@@ -57,7 +63,9 @@ class BscContractMaster(ContractMaster):
 
     def get_balances(self) -> GetBalanceResult:
         fungible_token_balances, fungible_errors = self.__get_fungible_token_balances()
-        possessable_balances, possessable_errors, possessable_ignored = self.__get_possessable_address_balances()
+        possessable_balances, possessable_errors, possessable_ignored = (
+            self.__get_possessable_address_balances()
+        )
         return GetBalanceResult(
             balance_results=fungible_token_balances + possessable_balances,
             ignored_results=possessable_ignored,
@@ -81,7 +89,9 @@ class BscContractMaster(ContractMaster):
                 balances.append(res)
         return balances, errored, ignored
 
-    def __get_fungible_token_balances(self) -> tuple[list[BalanceResult], list[ErroredResult]]:
+    def __get_fungible_token_balances(
+        self,
+    ) -> tuple[list[BalanceResult], list[ErroredResult]]:
         errors: list[ErroredResult] = list()
         fungible_token_balances: list[BalanceResult] = list()
         for address in self.fungible_token_addresses:
@@ -93,19 +103,25 @@ class BscContractMaster(ContractMaster):
                 fungible_token_balances.append(res)
         return fungible_token_balances, errors
 
-    def __get_token_balance(self, contract_address: str) -> BalanceResult | ErroredResult:
+    def __get_token_balance(
+        self, contract_address: str
+    ) -> BalanceResult | ErroredResult:
         try:
             return BalanceResult(
                 application="bsc",
                 service="spot",
-                items=Bep20TokenContract(web3=self.web3, address=contract_address).balance_of(
+                items=Bep20TokenContract(
+                    web3=self.web3, address=contract_address
+                ).balance_of(
                     account=self.user_address, block_identifier=self.block_identifier
                 ),
             )
         except Exception as e:
             return ErroredResult(address=contract_address, reason=str(e))
 
-    def __get_balance(self, address: str) -> BalanceResult | IgnoredResult | ErroredResult:
+    def __get_balance(
+        self, address: str
+    ) -> BalanceResult | IgnoredResult | ErroredResult:
         contract: Type[Contract]
         master = self.master.get(address, None)
         if master is None:
@@ -149,7 +165,9 @@ class BscContractMaster(ContractMaster):
             return BalanceResult(
                 application=master.application,
                 service=master.service,
-                items=contract(web3=self.web3, address=address, txs=self.txs).balance_of(
+                items=contract(
+                    web3=self.web3, address=address, txs=self.txs
+                ).balance_of(
                     account=self.user_address, block_identifier=self.block_identifier
                 ),
             )

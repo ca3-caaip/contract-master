@@ -43,7 +43,9 @@ class FarmingServiceItem(BaseModel):
     data: FarmingServiceData
 
     def is_empty(self) -> bool:
-        return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
+        return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(
+            self.data.reward
+        )
 
 
 class StakedServiceItem(BaseModel):
@@ -56,7 +58,9 @@ class StakedServiceItem(BaseModel):
     data: StakedServiceData
 
     def is_empty(self) -> bool:
-        return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(self.data.reward)
+        return TokenAmount.is_all_empty(self.data.supply) and TokenAmount.is_all_empty(
+            self.data.reward
+        )
 
 
 class LiquidityPoolServiceItem(BaseModel):

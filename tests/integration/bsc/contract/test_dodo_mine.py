@@ -20,7 +20,9 @@ class TestDodoMine(TestCase):
             address="0x01f9bfac04e6184e90bd7eafd51999ce430cc750",
             txs=self.open_tx_files("sample_data/tx-0x283b7f.json"),
         )
-        result = contract.balance_of(account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13")
+        result = contract.balance_of(
+            account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13"
+        )
         print(result)
         assert isinstance(result, list)
 

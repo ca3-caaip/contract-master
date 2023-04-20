@@ -19,12 +19,14 @@ class CreamLendingCEther(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx]) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
+    def balance_of(
+        self, account: str, block_identifier: int | Literal["latest"] = "latest"
+    ) -> list[ServiceItem]:
         # crBNBはunderlyingをmethodで取得できず、暗黙的にwrapped bnbが定数として利用されている
         underlying_token = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
-        balance = self.contract.functions.balanceOfUnderlying(Web3.toChecksumAddress(account)).call(
-            block_identifier=block_identifier
-        )
+        balance = self.contract.functions.balanceOfUnderlying(
+            Web3.toChecksumAddress(account)
+        ).call(block_identifier=block_identifier)
         return [
             LendingServiceItem(
                 data=LendingServiceItem.LendingServiceData(

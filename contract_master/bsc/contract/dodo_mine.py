@@ -16,26 +16,37 @@ class DodoMine(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx]) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
+    def balance_of(
+        self, account: str, block_identifier: int | Literal["latest"] = "latest"
+    ) -> list[ServiceItem]:
         pids = self.__fetch_pids()
-        account = Web3.toChecksumAddress(account)
+        account_address = Web3.toChecksumAddress(account)
         staked_service_item_list: list[ServiceItem] = []
         for pid in pids:
-            rewards_token: str = "0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2"  # DODO Token, BSC上のDODOMINEはリワードがこれだけらしい
-            staked_amount: int = self.contract.functions.userInfo(int(pid), account).call(
+            rewards_token: str = (  # DODO Token, BSC上のDODOMINEはリワードがこれだけらしい
+                "0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2"
+            )
+            staked_amount: int = self.contract.functions.userInfo(
+                int(pid), account
+            ).call(block_identifier=block_identifier)[0]
+            stake_token: str = self.contract.functions.poolInfos(int(pid)).call(
                 block_identifier=block_identifier
             )[0]
-            stake_token: str = self.contract.functions.poolInfos(int(pid)).call(block_identifier=block_identifier)[0]
             staked_token_info = self.__parse_stake_token(
                 amount=staked_amount,
                 stake_token=stake_token,
             )
             rewards_token_amount = self.__get_rewards_token_amount(
-                account=account, rewards_token=rewards_token, stake_token=stake_token, block_identifier=block_identifier
+                account=account_address,
+                rewards_token=rewards_token,
+                stake_token=stake_token,
+                block_identifier=block_identifier,
             )
             staked_service_item_list.append(
                 StakedServiceItem(
-                    data=StakedServiceItem.StakedServiceData(supply=[staked_token_info], reward=[rewards_token_amount])
+                    data=StakedServiceItem.StakedServiceData(
+                        supply=[staked_token_info], reward=[rewards_token_amount]
+                    )
                 )
             )
         return staked_service_item_list
@@ -50,7 +61,11 @@ class DodoMine(Contract):
         pids: list[str] = []
         for tx in txs:
             for e in tx.log_events:
-                if e.sender_address == self.address and e.decoded and e.decoded.name == "Deposit":
+                if (
+                    e.sender_address == self.address
+                    and e.decoded
+                    and e.decoded.name == "Deposit"
+                ):
                     if e.decoded.get_param("pid"):
                         pid = e.decoded.get_param("pid")
                         if pid not in pids:
@@ -58,12 +73,18 @@ class DodoMine(Contract):
         return pids
 
     def __get_rewards_token_amount(
-        self, account: ChecksumAddress, rewards_token: str, stake_token: str, block_identifier: int | Literal["latest"]
+        self,
+        account: ChecksumAddress,
+        rewards_token: str,
+        stake_token: str,
+        block_identifier: int | Literal["latest"],
     ) -> TokenAmount:
         """
         リワードを集計する
         """
-        rewards_amount: int = self.contract.functions.getPendingReward(stake_token, account).call(
+        rewards_amount: int = self.contract.functions.getPendingReward(
+            stake_token, account
+        ).call(
             block_identifier=block_identifier
         )  # BSC上のDODOMINEのリワードが１種類だけという前提でgetPendingRewardにしている。複数だった場合はgetAllPendingRewardにしてリターンもToken Amountのリストにする必要がある
         return create_bsc_token_amount(
@@ -83,10 +104,18 @@ class DodoMine(Contract):
         """
 
         stake_token_dict = {
-            "0xBEb34A9d23E0fe41d7b08AE3A4cbAD9A63ce0aea".lower(): "0xe9e7cea3dedca5984780bafc599bd69add087d56",  # BUSD
-            "0x56ce908EeBafea026ab047CEe99a3afF039B4a33".lower(): "0x55d398326f99059fF775485246999027B3197955",  # USDT
-            "0xc9e1d10442296c4729270b9c1de15f742ae1c981".lower(): "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",  # USDC
-            "0xddee2e5f98bbe93e77f16bfa6b5669c688396f93".lower(): "0xe9e7cea3dedca5984780bafc599bd69add087d56",  # BUSD
+            "0xBEb34A9d23E0fe41d7b08AE3A4cbAD9A63ce0aea".lower(): (
+                "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+            ),  # BUSD
+            "0x56ce908EeBafea026ab047CEe99a3afF039B4a33".lower(): (
+                "0x55d398326f99059fF775485246999027B3197955"
+            ),  # USDT
+            "0xc9e1d10442296c4729270b9c1de15f742ae1c981".lower(): (
+                "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"
+            ),  # USDC
+            "0xddee2e5f98bbe93e77f16bfa6b5669c688396f93".lower(): (
+                "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+            ),  # BUSD
         }
         if stake_token.lower() in stake_token_dict:
             staked = stake_token_dict[stake_token.lower()]
