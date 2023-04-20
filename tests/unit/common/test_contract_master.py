@@ -20,7 +20,10 @@ def test_filter_by_datetime_within():
         TestData(block_signed_at=datetime.fromisoformat("2022-10-06")),
     ]
 
-    assert filter_by_datetime_within(test_data, datetime.fromisoformat("2022-10-06")) == expected
+    assert (
+        filter_by_datetime_within(test_data, datetime.fromisoformat("2022-10-06"))
+        == expected
+    )
 
 
 def test_get_max_block_height():

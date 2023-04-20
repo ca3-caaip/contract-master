@@ -61,7 +61,9 @@ def test_accumulate_balance_results():
                                 TokenAmount(
                                     uti="cake",
                                     amount="0.3",
-                                    original_id="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                                    original_id=(
+                                        "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+                                    ),
                                     balance=300,
                                     decimals=3,
                                     symbol="Cake",
@@ -69,7 +71,9 @@ def test_accumulate_balance_results():
                                 TokenAmount(
                                     uti="busd",
                                     amount="0.4",
-                                    original_id="0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                                    original_id=(
+                                        "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+                                    ),
                                     balance=400,
                                     decimals=3,
                                     symbol="BUSD",
@@ -85,7 +89,9 @@ def test_accumulate_balance_results():
                                 TokenAmount(
                                     uti="cake",
                                     amount="0.5",
-                                    original_id="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                                    original_id=(
+                                        "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+                                    ),
                                     balance=500,
                                     decimals=3,
                                     symbol="Cake",
@@ -93,7 +99,9 @@ def test_accumulate_balance_results():
                                 TokenAmount(
                                     uti="busd",
                                     amount="0.6",
-                                    original_id="0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                                    original_id=(
+                                        "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+                                    ),
                                     balance=600,
                                     decimals=3,
                                     symbol="BUSD",
@@ -115,7 +123,9 @@ def test_accumulate_balance_results():
                                 TokenAmount(
                                     uti="busd",
                                     amount="0",
-                                    original_id="0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                                    original_id=(
+                                        "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+                                    ),
                                     balance=0,
                                     decimals=3,
                                     symbol="BUSD",
@@ -125,7 +135,9 @@ def test_accumulate_balance_results():
                                 TokenAmount(
                                     uti="aog",
                                     amount="0",
-                                    original_id="0x40c8225329bd3e28a043b029e0d07a5344d2c27c",
+                                    original_id=(
+                                        "0x40c8225329bd3e28a043b029e0d07a5344d2c27c"
+                                    ),
                                     balance=0,
                                     decimals=3,
                                     symbol="AOG",
@@ -163,7 +175,9 @@ def test_accumulate_balance_results():
                             {
                                 "uti": "cake",
                                 "amount": "0.3",
-                                "original_id": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                                "original_id": (
+                                    "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+                                ),
                                 "balance": 300,
                                 "decimals": 3,
                                 "symbol": "Cake",
@@ -171,7 +185,9 @@ def test_accumulate_balance_results():
                             {
                                 "uti": "busd",
                                 "amount": "0.4",
-                                "original_id": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                                "original_id": (
+                                    "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+                                ),
                                 "balance": 400,
                                 "decimals": 3,
                                 "symbol": "BUSD",
@@ -187,7 +203,9 @@ def test_accumulate_balance_results():
                             {
                                 "uti": "cake",
                                 "amount": "0.5",
-                                "original_id": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                                "original_id": (
+                                    "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+                                ),
                                 "balance": 500,
                                 "decimals": 3,
                                 "symbol": "Cake",
@@ -195,7 +213,9 @@ def test_accumulate_balance_results():
                             {
                                 "uti": "busd",
                                 "amount": "0.6",
-                                "original_id": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                                "original_id": (
+                                    "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+                                ),
                                 "balance": 600,
                                 "decimals": 3,
                                 "symbol": "BUSD",
@@ -235,7 +255,9 @@ class TestGetBalanceResult(TestCase):
                 errored_results=[ErroredResult(address="address", reason="reason")],
                 ignored_results=[IgnoredResult(address="address", reason="reason")],
             ).to_json()
-            == '{"summary": {"bsc": {"spot": [{"type": "common", "data": {"uti": "usdt", "amount": "0.1",'
-            ' "original_id": "id", "balance": 100, "decimals": 3, "symbol": "USDT"}}]}}, "ignored": [{"address":'
-            ' "address", "reason": "reason"}], "errored": [{"address": "address", "reason": "reason"}]}'
+            == '{"summary": {"bsc": {"spot": [{"type": "common", "data": {"uti":'
+            ' "usdt", "amount": "0.1", "original_id": "id", "balance": 100,'
+            ' "decimals": 3, "symbol": "USDT"}}]}}, "ignored": [{"address":'
+            ' "address", "reason": "reason"}], "errored": [{"address": "address",'
+            ' "reason": "reason"}]}'
         )

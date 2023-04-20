@@ -23,11 +23,17 @@ class CreamLendingCErc20Delegator(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx]) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
-        token = self.contract.functions.underlying().call(block_identifier=block_identifier)
-        _error, _cream_token_balance, borrow_balance, _exchange_rate = self.contract.functions.getAccountSnapshot(
-            Web3.toChecksumAddress(account)
-        ).call(block_identifier=block_identifier)
+    def balance_of(
+        self, account: str, block_identifier: int | Literal["latest"] = "latest"
+    ) -> list[ServiceItem]:
+        token = self.contract.functions.underlying().call(
+            block_identifier=block_identifier
+        )
+        _error, _cream_token_balance, borrow_balance, _exchange_rate = (
+            self.contract.functions.getAccountSnapshot(
+                Web3.toChecksumAddress(account)
+            ).call(block_identifier=block_identifier)
+        )
         return [
             LendingServiceItem(
                 data=LendingServiceItem.LendingServiceData(

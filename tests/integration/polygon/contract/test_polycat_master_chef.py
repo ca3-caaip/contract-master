@@ -27,6 +27,8 @@ class TestPolycatMasterChef(TestCase):
             address="0x8cfd1b9b7478e7b0422916b72d1db6a9d513d734",
             txs=open_tx_files(path="sample_data/polygon/tx-0x283b7f.json"),
         )
-        result = contract.balance_of(account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13")
+        result = contract.balance_of(
+            account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13"
+        )
         print(result)
         assert isinstance(result, list)

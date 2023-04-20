@@ -20,7 +20,9 @@ class TestEquatorLiquidityPool(TestCase):
             address="0x24b1983b230b11cc3fa9ff75c73ace7cb73e1795",
             txs=self.open_tx_files("sample_data/tx-0x283b7f.json"),
         )
-        result = contract.balance_of(account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13")
+        result = contract.balance_of(
+            account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13"
+        )
         print(result)
         assert isinstance(result, list)
 

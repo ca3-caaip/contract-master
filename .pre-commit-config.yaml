@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: check-toml
       - id: check-yaml
@@ -8,16 +8,16 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.0
+    rev: v3.0.0-alpha.6
     hooks:
       - id: prettier
         files: "contract_master|tests"
   - repo: https://github.com/psf/black
-    rev: 22.8.0
+    rev: 23.3.0
     hooks:
       - id: black
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.11.5
     hooks:
       - id: isort
         args: ["--profile", "black"]

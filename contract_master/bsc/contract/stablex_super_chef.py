@@ -25,22 +25,33 @@ class StablexSuperChef(Contract):
     def __init__(self, web3: Web3, address: str, txs: list[CovalentTx]) -> None:
         super().__init__(web3, address, txs)
 
-    def balance_of(self, account: str, block_identifier: int | Literal["latest"] = "latest") -> list[ServiceItem]:
+    def balance_of(
+        self, account: str, block_identifier: int | Literal["latest"] = "latest"
+    ) -> list[ServiceItem]:
         pids = self.__fetch_pids()
-        account = Web3.toChecksumAddress(account)
+        account_address = Web3.toChecksumAddress(account)
         farming_service_item_list: list[ServiceItem] = []
         for pid in pids:
-            rewards_token: str = self.contract.functions.stax().call(block_identifier=block_identifier)
-            rewards_token_amount = self.__get_rewards_token_amount(
-                pid=pid, account=account, rewards_token=rewards_token, block_identifier=block_identifier
+            rewards_token: str = self.contract.functions.stax().call(
+                block_identifier=block_identifier
             )
-            staked_amount: int = self.contract.functions.userInfo(int(pid), account).call(
+            rewards_token_amount = self.__get_rewards_token_amount(
+                pid=pid,
+                account=account_address,
+                rewards_token=rewards_token,
+                block_identifier=block_identifier,
+            )
+            staked_amount: int = self.contract.functions.userInfo(
+                int(pid), account_address
+            ).call(block_identifier=block_identifier)[0]
+            lp_token: str = self.contract.functions.poolInfo(int(pid)).call(
                 block_identifier=block_identifier
             )[0]
-            lp_token: str = self.contract.functions.poolInfo(int(pid)).call(block_identifier=block_identifier)[0]
             if lp_token != rewards_token:
                 staked_lp_info = self.__parse_staked_lp(
-                    amount=staked_amount, lp_token=lp_token, block_identifier=block_identifier
+                    amount=staked_amount,
+                    lp_token=lp_token,
+                    block_identifier=block_identifier,
                 )
             else:
                 staked_lp_info = [
@@ -52,7 +63,9 @@ class StablexSuperChef(Contract):
                     )
                 ]
             farming_service_item = FarmingServiceItem(
-                data=FarmingServiceItem.FarmingServiceData(reward=[rewards_token_amount], supply=staked_lp_info)
+                data=FarmingServiceItem.FarmingServiceData(
+                    reward=[rewards_token_amount], supply=staked_lp_info
+                )
             )
             farming_service_item_list.append(farming_service_item)
         return farming_service_item_list
@@ -67,7 +80,11 @@ class StablexSuperChef(Contract):
         pids: list[str] = []
         for tx in txs:
             for e in tx.log_events:
-                if e.sender_address == self.address and e.decoded and e.decoded.name == "Deposit":
+                if (
+                    e.sender_address == self.address
+                    and e.decoded
+                    and e.decoded.name == "Deposit"
+                ):
                     if e.decoded.get_param("pid"):
                         pid = e.decoded.get_param("pid")
                         if pid not in pids:
@@ -75,7 +92,11 @@ class StablexSuperChef(Contract):
         return pids
 
     def __get_rewards_token_amount(
-        self, pid: str, account: ChecksumAddress, rewards_token: str, block_identifier: int | Literal["latest"]
+        self,
+        pid: str,
+        account: ChecksumAddress,
+        rewards_token: str,
+        block_identifier: int | Literal["latest"],
     ) -> TokenAmount:
         """
         リワードを集計する
@@ -85,9 +106,9 @@ class StablexSuperChef(Contract):
         """
         rewards_amount: int = 0
         try:
-            rewards_amount = self.contract.functions.pendingStax(int(pid), account).call(
-                block_identifier=block_identifier
-            )
+            rewards_amount = self.contract.functions.pendingStax(
+                int(pid), account
+            ).call(block_identifier=block_identifier)
         except Exception:
             pass
 
@@ -105,12 +126,20 @@ class StablexSuperChef(Contract):
         ステークしてるLP Pairからここの量を取得して返す
         """
         lp_contract = PancakeLiquidityPool(web3=self.web3, address=lp_token).contract
-        token0: str = lp_contract.functions.token0().call(block_identifier=block_identifier)
-        token1: str = lp_contract.functions.token1().call(block_identifier=block_identifier)
-        reserves: list[int] = lp_contract.functions.getReserves().call(block_identifier=block_identifier)
+        token0: str = lp_contract.functions.token0().call(
+            block_identifier=block_identifier
+        )
+        token1: str = lp_contract.functions.token1().call(
+            block_identifier=block_identifier
+        )
+        reserves: list[int] = lp_contract.functions.getReserves().call(
+            block_identifier=block_identifier
+        )
         token0_reserve: int = reserves[0]
         token1_reserve: int = reserves[1]
-        total_supply: int = lp_contract.functions.totalSupply().call(block_identifier=block_identifier)
+        total_supply: int = lp_contract.functions.totalSupply().call(
+            block_identifier=block_identifier
+        )
         user_share: Decimal = Decimal(amount) / Decimal(total_supply)
         user_token0_balance = int(token0_reserve * user_share)
         user_token1_balance = int(token1_reserve * user_share)

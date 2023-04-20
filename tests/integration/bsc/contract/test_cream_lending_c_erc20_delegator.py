@@ -19,5 +19,7 @@ class TestCreamLendingCErc20Delegator(TestCase):
             address="0xd83c88db3a6ca4a32fff1603b0f7ddce01f5f727",
             txs=[],
         )
-        result = contract.balance_of(account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13")
+        result = contract.balance_of(
+            account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13"
+        )
         assert isinstance(result, LendingServiceItem)

@@ -51,7 +51,9 @@ def accumulate_balance_results(balance_results: list[BalanceResult]) -> BalanceS
         additional_items = filterfalse(lambda x: x.is_empty(), balance.items)
         additional_items = list(map(lambda x: x.dict(), additional_items))
         if additional_items:
-            services: dict[Service, list[Item]] = summary.get(balance.application, dict())
+            services: dict[Service, list[Item]] = summary.get(
+                balance.application, dict()
+            )
             existing_items: list[Item] = services.get(balance.service, list())
             services[balance.service] = existing_items + additional_items
             summary[balance.application] = services

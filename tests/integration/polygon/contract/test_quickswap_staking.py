@@ -27,5 +27,7 @@ class TestQuickswapStaking(TestCase):
             address="0x2df6a6b1b7aa23a842948a81714a2279e603e32f",
             txs=open_tx_files(path="sample_data/polygon/tx-0x283b7f.json"),
         )
-        result = contract.balance_of(account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13")
+        result = contract.balance_of(
+            account="0x283B7FAbfE6f8d41Dca3A2B63255261998bA4D13"
+        )
         assert isinstance(result, list)
